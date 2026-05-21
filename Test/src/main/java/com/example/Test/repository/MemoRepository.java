@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MemoRepository extends JpaRepository<Memo, Long> {
+    //역순으로 정렬
     List<Memo> findByMnoBetweenOrderByMnoDesc(Long from, Long to);
 
     Page<Memo> findByMnoBetween(Long from, Long to, Pageable pageable);
