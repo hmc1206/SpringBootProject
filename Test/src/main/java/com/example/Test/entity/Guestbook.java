@@ -3,7 +3,7 @@ package com.example.Test.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
+@Entity //jpa가 관리하는 엔티티임을 의미
 @Getter
 @Builder
 @AllArgsConstructor
