@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -34,7 +35,7 @@ public class GuestbookServicelmpl implements GuestBookService{
 
         repository.save(entity); //save를 통해서 저장, 저장된 후에 엔티티가 가지는 gno값을 반환
 
-        return null;
+        return entity.getGno();
     }
 
     @Override
@@ -46,5 +47,34 @@ public class GuestbookServicelmpl implements GuestBookService{
         Function<Guestbook, GuestbookDTO> fn = (entity -> entityToDto(entity));
 
         return new PageResultDTO<>(result, fn);
+    }
+
+    @Override
+    public GuestbookDTO read(Long gno) { //read()기능을 구현
+        Optional<Guestbook> result = repository.findById(gno);
+        //findById()를 통해서 엔티티 객체를 가져옴
+
+        return result.isPresent()? entityToDto(result.get()) : null;
+        //entityToDto()를 이용해서 엔티티 객체를 DTO로 변환해서 반환
+    }
+
+    @Override
+    public void remove(Long gno){
+        repository.deleteById(gno);
+    }
+
+    @Override
+    public void modify(GuestbookDTO dto) {
+        //업데이트 하는 항목은 '제목' '내용'
+        Optional<Guestbook> result = repository.findById(dto.getGno());
+
+        if(result.isPresent()){
+            Guestbook entity = result.get();
+
+            entity.changeTitle(dto.getTitle());
+            entity.changeContent(dto.getContent());
+
+            repository.save(entity);
+        }
     }
 }

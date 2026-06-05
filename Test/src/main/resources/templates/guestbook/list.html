@@ -3,7 +3,16 @@
 
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
   <th:block th:fragment="content">
-    <h1 class="mt-4">GuestBoot List Page</h1>
+    <h1 class="mt-4">
+      GuestBoot List Page
+      <span>
+        <a th:href="@{/guestbook/register}">
+          <button type="button" class="btn btn-outline-primary">
+            REGISTER
+          </button>
+        </a>
+      </span>
+    </h1>
 
     <table class="table table-striped">
       <thead>
@@ -15,54 +24,75 @@
       </tr>
       </thead>
       <tbody>
-
-        <tr th:each="dto : ${result.dtoList}">
-          <th scope="row">[[${dto.gno}]]</th>
-          <td>[[${dto.title}]]</td>
-          <td>[[${dto.writer}]]</td>
-          <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
-        </tr>
+      <tr th:each="dto : ${result.dtoList}">
+        <th scope="row">
+          <a th:href="@{/guestbook/read(gno = ${dto.gno}, page = ${result.page})}">
+            [[${dto.gno}]]
+          </a>
+        </th>
+        <td>[[${dto.title}]]</td>
+        <td>[[${dto.writer}]]</td>
+        <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
+      </tr>
       </tbody>
     </table>
+
+    <!-- 페이지네이션 생략 (기존 코드 동일) -->
     <ul class="pagination h-100 justify-content-center align-items-center">
       <li class="page-item" th:if="${result.prev}">
         <a th:href="@{/guestbook/list(page=${result.start -1})}" class="page-link" tabindex="-1">Previous</a>
       </li>
-
       <li th:class=" 'page-item ' + ${result.page == page? 'active': ''}" th:each="page: ${result.pageList}">
-        <a th:href="@{/guestbook/list(page=${page}, size = ${result.size})}" class="page-link">
-          [[${page}]]
-        </a>
+        <a th:href="@{/guestbook/list(page=${page}, size = ${result.size})}" class="page-link">[[${page}]]</a>
       </li>
-
       <li class="page-item" th:if="${result.next}">
         <a th:href="@{/guestbook/list(page=${result.end+1})}" class="page-link">Next</a>
       </li>
     </ul>
+
+    <!-- 모달창 영역 (내용을 쉽게 바꾸기 위해 클래스 추가) -->
     <div class="modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Modal Title</h5>
+            <h5 class="modal-title">등록 완료</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p>Modal body text goes here.</p>
+            <!-- 자바스크립트가 이 영역의 텍스트를 바꿉니다 -->
+            <p class="modal-text">처리가 완료되었습니다.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save Changes</button>
           </div>
         </div>
       </div>
     </div>
+    <script src="https://jquery.com"></script>
+    <!-- 호환성을 극대화한 스크립트 영역 -->
     <script th:inline="javascript">
-      var msg = [[${msg}]];
-      console.log(msg)
-      if(msg){
-        $(".model").modal();
+      var msg = /*[[${msg}]]*/ null;
+      console.log("전달된 글 번호: ", msg);
+
+      if (msg) {
+        // 1. 모달 텍스트 변경
+        document.querySelector(".modal-text").innerText = msg + "번 글이 등록되었습니다.";
+
+        // 2. Bootstrap 5 방식 시도
+        if (typeof bootstrap !== 'undefined') {
+          var myModal = new bootstrap.Modal(document.querySelector('.modal'));
+          myModal.show();
+        }
+        // 3. Bootstrap 4 이하 방식 시도 (jQuery 필요)
+        else if (typeof $ !== 'undefined' && $.fn.modal) {
+          $(".modal").modal('show');
+        }
+        // 4. 둘 다 실패 시 경고창이라도 띄우기
+        else {
+          alert(msg + "번 글이 등록되었습니다. (라이브러리 로드 오류)");
+        }
       }
     </script>
   </th:block>
