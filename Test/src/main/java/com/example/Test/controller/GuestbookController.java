@@ -74,4 +74,20 @@ public class GuestbookController {
 
         return "redirect:/guestbook/list";
     }
+
+    @PostMapping("/modify")
+    public String modify(GuestbookDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, RedirectAttributes redirectAttributes){
+        //GuestbookDTO : 수정해야 하는 글의 정보를 가짐
+        //PageRequestDTO : 기본의 페이지 정보를 유지하기 위한
+        //RedirectAttributes : 리다이렉트로 이동하기 위한
+        log.info("post modify........................................................");
+        log.info("dto : " + dto);
+
+        service.modify(dto);
+
+        redirectAttributes.addAttribute("page", requestDTO.getPage());
+        redirectAttributes.addAttribute("gno", dto.getGno());
+
+        return "redirect:/guestbook/read";
+    }
 }

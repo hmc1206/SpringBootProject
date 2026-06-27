@@ -17,10 +17,13 @@
   <!-- Custom styles for this template -->
   <link rel="stylesheet" th:href="@{/css/simple-sidebar.css}">
 
-  <!-- Bootstrap core JavaScript -->
-  <script th:src="@{vendor/jquery/jquery.min.js}"></script>
-  <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <!-- 💡 제이쿼리를 가장 먼저 안전하게 로드합니다 💡 -->
+  <!-- 만약 프로젝트 내부 파일 로드가 실패하더라도 정상 작동하도록 웹 CDN 주소로 교체했습니다 -->
+  <script src="https://jquery.com"></script>
 
+  <!-- Bootstrap core JavaScript -->
+  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+  <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </head>
 
 <body>

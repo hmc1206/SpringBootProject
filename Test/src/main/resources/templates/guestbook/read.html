@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<th:block th:replace="~{/layout/basic :: setContent(~{this ::content} )}">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
   <th:block th:fragment="content">
     <h1 class="mt-4">GuestBook Read Page</h1>
 
@@ -31,11 +31,11 @@
       <input type="text" class="form-control" name="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
     </div>
 
-    <a th:href="@{guestbook/modify(gno = ${dto.gno}, page=${requestDTO.page})}">
+    <a th:href="@{/guestbook/modify(gno = ${dto.gno}, page=${requestDTO.page})}">
       <button type="button" class="btn btn-primary">Modify</button>
     </a>
 
-    <a th:href="@{guestbook/list(page=${requestDTO.page})}">
+    <a th:href="@{/guestbook/list(page=${requestDTO.page})}">
       <button type="button" class="btn btn-info">List</button>
     </a>
 
