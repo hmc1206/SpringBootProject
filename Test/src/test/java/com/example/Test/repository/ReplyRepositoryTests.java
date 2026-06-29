@@ -18,7 +18,7 @@ public class ReplyRepositoryTests {
     public  void insertReply(){
         IntStream.rangeClosed(1,100).forEach(i -> {
             //1부터 100까지의 임의의 번호
-            long bno = (long)(Math.random() * 100) + 1;
+            long bno = (long)(Math.random() * 200) + 1;
             Board board = Board.builder().bno(bno).build();
             Reply reply = Reply.builder()
                     .text("Reply......."+i)
